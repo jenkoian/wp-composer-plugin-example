@@ -1,0 +1,29 @@
+language: php
+php:
+    - 7.4
+branches:
+    only:
+        - master
+
+services:
+    - mysql
+
+cache:
+    directories:
+        - "/home/travis/.composer/cache"
+
+before_install:
+    - "composer selfupdate"
+
+install:
+    - travis_retry composer install -o
+
+before_script:
+    - cp ./tests/.env.travis ./tests/.env
+    - mysql -e 'CREATE DATABASE IF NOT EXISTS example_plugin_test;'
+
+script:
+    - "./bin/phpcs . --severity=1"
+    - "export WP_MULTISITE=0; ./bin/phpunit --exclude-group=ms-required"
+    - "export WP_MULTISITE=1; ./bin/phpunit --exclude-group=ms-excluded"
+

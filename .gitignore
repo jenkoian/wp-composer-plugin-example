@@ -1,0 +1,7 @@
+/vendor/
+
+/bin/*
+!/bin/.gitkeep
+
+/tests/wordpress
+/tests/.env
